@@ -15,9 +15,9 @@ A modern link-in-bio tool that helps you organize, manage, and share all your im
 | Technology | Version |
 |------------|---------|
 | Next.js | 16.0.3 |
-| React | 19.2.0 |
 | MongoDB | 7.0.0 |
 | Tailwind CSS | 4.0 |
+| AWS EC2 | - |
 
 Database is deployed on AWS EC2.
 
@@ -95,7 +95,3 @@ linkium/
 ## Security Note
 
 Password reset does not require email verification — anyone with access to an email address can reset that account's password.
-
-## License
-
-MIT
