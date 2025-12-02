@@ -9,6 +9,7 @@ const Navbar = () => {
     const pathname = usePathname()
     const router = useRouter()
     const [handle, setHandle] = useState("")
+    const [menuOpen, setMenuOpen] = useState(false)
 
     useEffect(() => {
         if (typeof window === 'undefined') return
@@ -79,40 +80,118 @@ const Navbar = () => {
     }
 
     return (
-        <nav className='w-[80vw] mx-auto bg-white flex justify-between items-center px-10 rounded-full p-3 fixed top-[6vh] right-[10vw] shadow-xl'>
-            <div className="logo flex items-center gap-5">
+        <>
+            <nav className='w-[95vw] md:w-[80vw] mx-auto bg-white flex justify-between items-center px-4 md:px-10 rounded-full p-2 md:p-3 fixed top-2 md:top-[6vh] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[10vw] shadow-xl z-50'>
+                {/* Logo */}
+                <div className="logo flex items-center gap-2 md:gap-5">
+                    <Link href='/'>
+                        <img src="logo.png" alt="logo" className='w-[100px] md:w-[150px]'/>
+                    </Link>
 
-                <Link href='/'>
-                    <img src="logo.png" alt="logo" width={150}/>
-                </Link>
-
-                <div className='flex gap-3 font-bold'>
-                    {userEmail && (
-                        <Link href='/generate' className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-6'>Add Links</Link>
-                    )}
-                    <Link href='/about' className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-6'>About</Link>
+                    {/* Desktop nav links */}
+                    <div className='hidden md:flex gap-3 font-bold'>
+                        {userEmail && (
+                            <Link href='/generate' className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-6'>Add Links</Link>
+                        )}
+                        <Link href='/about' className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-6'>About</Link>
+                    </div>
                 </div>
-            </div>
 
-            <div className='flex gap-5 bg-gray-300 rounded-full p-3 px-6 shadow-sm'>
-                {userEmail ? (
-                    <>
-                        <span onClick={goToDashboard} className='bg-white text-gray-900 p-2 px-4 rounded-full font-bold max-w-[200px] truncate cursor-pointer hover:bg-gray-950 hover:text-white transition-all duration-200'>{userEmail}</span>
-                        <button
-                            onClick={handleLogout}
-                            className='hover:bg-gray-950 hover:text-white hover:shadow-lg  p-2 px-4 rounded-full font-bold transition-all duration-200 cursor-pointer'
+                {/* Desktop auth buttons */}
+                <div className='hidden md:flex gap-5 bg-gray-300 rounded-full p-3 px-6 shadow-sm'>
+                    {userEmail ? (
+                        <>
+                            <span onClick={goToDashboard} className='bg-white text-gray-900 p-2 px-4 rounded-full font-bold max-w-[200px] truncate cursor-pointer hover:bg-gray-950 hover:text-white transition-all duration-200'>{userEmail}</span>
+                            <button
+                                onClick={handleLogout}
+                                className='hover:bg-gray-950 hover:text-white hover:shadow-lg p-2 px-4 rounded-full font-bold transition-all duration-200 cursor-pointer'
+                            >
+                                Log out
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link href='/login' className='hover:bg-gray-950 hover:text-white hover:shadow-lg p-2 px-4 rounded-full font-bold transition-all duration-200'>Log in</Link>
+                            <Link href='/signup' className='hover:bg-gray-950 hover:text-white hover:shadow-lg p-2 px-4 rounded-full font-bold transition-all duration-200'>Sign up</Link>
+                        </>
+                    )}
+                </div>
+
+                {/* Hamburger button - mobile only */}
+                <button 
+                    className='md:hidden p-2 hover:bg-gray-200 rounded-full transition-all'
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {menuOpen ? (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        ) : (
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        )}
+                    </svg>
+                </button>
+            </nav>
+
+            {/* Mobile menu dropdown */}
+            {menuOpen && (
+                <div className='mt-5 md:hidden fixed top-14 right-[2.5vw] w-[60vw] bg-white rounded-2xl shadow-xl p-4 z-40'>
+                    <div className='flex flex-col gap-1 font-bold'>
+                        {userEmail && (
+                            <Link 
+                                href='/generate' 
+                                className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-4'
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Add Links
+                            </Link>
+                        )}
+                        <Link 
+                            href='/about' 
+                            className='hover:bg-gray-200 transition-all duration-200 rounded-full p-3 px-4'
+                            onClick={() => setMenuOpen(false)}
                         >
-                            Log out
-                        </button>
-                    </>
-                ) : (
-                    <>
-                        <Link href='/login' className='hover:bg-gray-950 hover:text-white hover:shadow-lg  p-2 px-4 rounded-full font-bold transition-all duration-200'>Log in</Link>
-                        <Link href='/signup' className='hover:bg-gray-950 hover:text-white hover:shadow-lg  p-2 px-4 rounded-full font-bold transition-all duration-200'>Sign up</Link>
-                    </>
-                )}
-            </div>
-        </nav>
+                            About
+                        </Link>
+                        
+                        <hr className='my-2 border-gray-200' />
+                        
+                        {userEmail ? (
+                            <>
+                                <span 
+                                    onClick={() => { goToDashboard(); setMenuOpen(false); }} 
+                                    className='p-3 px-4 rounded-full truncate cursor-pointer hover:bg-gray-200 transition-all duration-200'
+                                >
+                                    {userEmail}
+                                </span>
+                                <button
+                                    onClick={() => { handleLogout(); setMenuOpen(false); }}
+                                    className='text-left hover:bg-gray-200 p-3 px-4 rounded-full transition-all duration-200 cursor-pointer'
+                                >
+                                    Log out
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link 
+                                    href='/login' 
+                                    className='hover:bg-gray-200 p-3 px-4 rounded-full transition-all duration-200'
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    Log in
+                                </Link>
+                                <Link 
+                                    href='/signup' 
+                                    className='hover:bg-gray-200 p-3 px-4 rounded-full transition-all duration-200'
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    Sign up
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

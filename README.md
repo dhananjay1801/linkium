@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Linkium
+
+A modern link-in-bio tool that helps you organize, manage, and share all your important links with a single, shareable URL. Built with Next.js 16 and MongoDB.
+
+## Features
+
+- **Custom Handles** — Claim your unique username and get a personalized link page at `/yourhandle`
+- **Unlimited Links** — Add as many links as you need with custom titles
+- **User Authentication** — Secure signup, login, and password reset functionality
+- **Link Management** — Add and delete links from your dashboard
+- **Responsive Design** — Works on all devices
+
+## Tech Stack
+
+| Technology | Version |
+|------------|---------|
+| Next.js | 16.0.3 |
+| React | 19.2.0 |
+| MongoDB | 7.0.0 |
+| Tailwind CSS | 4.0 |
+
+Database is deployed on AWS EC2.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18.17 or later
+- MongoDB database (local or MongoDB Atlas)
+
+### Installation
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/yourusername/linkium.git
+   cd linkium
+   ```
+
+2. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables
+
+   Create a `.env.local` file in the root directory:
+
+   ```env
+   MONGODB_URI=your_mongodb_connection_string
+   ```
+
+4. Run the development server
+
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+linkium/
+├── app/
+│   ├── [handle]/          # Dynamic user profile pages
+│   ├── about/             # About page
+│   ├── api/
+│   │   ├── links/         # Links CRUD API
+│   │   ├── login/         # Authentication API
+│   │   ├── reset-password/# Password reset API
+│   │   └── users/         # User registration API
+│   ├── generate/          # Link tree builder page
+│   ├── login/             # Login page
+│   ├── signup/            # Signup page
+│   ├── layout.js          # Root layout
+│   ├── page.js            # Homepage
+│   └── globals.css        # Global styles
+├── components/
+│   ├── ForgotPassword.js  # Password reset component
+│   └── Navbar.js          # Navigation component
+├── lib/
+│   └── mongodb.js         # MongoDB connection helper
+└── public/                # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Sign up with your email
+2. Claim a unique handle for your profile URL
+3. Add links with titles
+4. Share your `/yourhandle` URL
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Security Note
 
-## Learn More
+Password reset does not require email verification — anyone with access to an email address can reset that account's password.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT

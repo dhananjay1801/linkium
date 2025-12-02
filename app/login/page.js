@@ -50,12 +50,12 @@ const Login = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-2 h-screen">
-                <div className='col1 bg-indigo-300 flex flex-col justify-center pl-[13vw] pr-15 gap-6 pt-27'>
+            <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen md:h-screen">
+                <div className='col1 bg-indigo-300 flex flex-col justify-center px-6 md:pl-[13vw] md:pr-15 gap-6 pt-28 md:pt-27 pb-10 md:pb-0'>
                     {!showForgot && (
                         <div>
-                            <h1 className='text-4xl font-bold'>Log in</h1>
-                            <p className='text-lg text-gray-700 mt-2'>Pick up where you left off and keep every link in sync.</p>
+                            <h1 className='text-3xl md:text-4xl font-bold'>Log in</h1>
+                            <p className='text-base md:text-lg text-gray-700 mt-2'>Pick up where you left off and keep every link in sync.</p>
                         </div>
                     )}
 
@@ -66,7 +66,7 @@ const Login = () => {
                                     <div className='items-center gap-2'>
                                         <div className='text-lg font-semibold'>Email:</div>
                                         <input
-                                            className='bg-white rounded-full px-4 pr-15 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
+                                            className='bg-white rounded-full px-4 pr-15 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto'
                                             type="email"
                                             placeholder='you@example.com'
                                             value={email}
@@ -76,7 +76,7 @@ const Login = () => {
                                     <div className='items-center gap-2'>
                                         <div className='text-lg font-semibold'>Password:</div>
                                         <input
-                                            className='bg-white rounded-full px-4 pr-15 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500'
+                                            className='bg-white rounded-full px-4 pr-15 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 w-full md:w-auto'
                                             type="password"
                                             placeholder='Enter your password'
                                             value={password}
@@ -113,7 +113,7 @@ const Login = () => {
                 </div>
 
                 <div className='col2 overflow-y-auto'>
-                    <Image className="w-full object-cover" src="/login_banner.png" alt="login" width={1200} height={1000}/>
+                    <Image className="w-full h-[50vh] md:h-auto object-cover" src="/login_banner.png" alt="login" width={1200} height={1000}/>
                 </div>
             </div>
         </div>

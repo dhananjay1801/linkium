@@ -15,7 +15,7 @@ export default function HandlePage() {
     useEffect(() => {
         const fetchLinks = async () => {
             try {
-                const response = await fetch(`/api/links?handle=${handle}`)
+                const response = await fetch(`/api/links?handle=${encodeURIComponent(handle)}`)
                 const data = await response.json()
                 
                 if (!response.ok || !data.success) {
@@ -94,11 +94,11 @@ export default function HandlePage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#A8D8EA] pt-42">
-            <div className="max-w-2xl mx-auto px-6">
+        <div className="min-h-screen bg-[#A8D8EA] pt-28 md:pt-42">
+            <div className="max-w-2xl mx-auto px-4 md:px-6">
                 <div className="text-center mb-12">
-                    <h1 className="text-5xl font-bold text-gray-900 mb-4">@{handle}</h1>
-                    <p className="text-gray-700 text-lg">All my links in one place</p>
+                    <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">@{handle}</h1>
+                    <p className="text-gray-700 text-base md:text-lg">All my links in one place</p>
                 </div>
 
                 <div className="flex flex-col gap-4">

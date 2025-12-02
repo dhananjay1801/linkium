@@ -12,11 +12,11 @@ const About = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#F3F4FF] pt-42 pb-16">
-      <section className="max-w-4xl mx-auto px-6">
+    <main className="min-h-screen bg-[#F3F4FF] pt-24 md:pt-42 pb-16">
+      <section className="max-w-4xl mx-auto px-4 md:px-6">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">What is Linkium?</h1>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">What is Linkium?</h1>
+          <p className="text-base md:text-lg text-gray-700 max-w-2xl mx-auto">
             Linkium is your single home on the internet for everything you create, share, and care about.
           </p>
         </div>

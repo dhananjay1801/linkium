@@ -13,8 +13,8 @@ export default function Home() {
 
     return (
         <main>
-            <section className="grid grid-cols-2 items-center">
-                <div className="bg-amber-300 h-screen flex flex-col justify-center items-center pt-20">
+            <section className="grid grid-cols-1 md:grid-cols-2 items-center">
+                <div className="bg-amber-300 min-h-screen md:h-screen flex flex-col justify-center items-center pt-24 md:pt-20 pb-10 md:pb-0 px-4">
                     <div className="bg-white rounded-[2rem] shadow-2xl p-8 flex flex-col items-center gap-5">
                         <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-pink-400 to-orange-400 flex flex-col items-center justify-center gap-1">
                             <div className="w-10 h-10 rounded-full bg-gray-200" />
@@ -39,9 +39,9 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="bg-green-600 pr-[10vw] pl-10 h-screen flex flex-col justify-center">
-                    <h1 className="text-5xl font-bold text-black mb-6">All your links. One place.</h1>
-                    <p className="text-xl mb-5">Linkium helps you organize, manage, and share all your important links with ease. Stay organized. Stay connected.</p>
+                <div className="bg-green-600 px-6 md:pr-[10vw] md:pl-10 min-h-screen md:h-screen flex flex-col justify-center py-10 md:py-0">
+                    <h1 className="text-3xl md:text-5xl font-bold text-black mb-6">All your links. One place.</h1>
+                    <p className="text-lg md:text-xl mb-5">Linkium helps you organize, manage, and share all your important links with ease. Stay organized. Stay connected.</p>
 
                     <div className="flex gap-4">
                         <Link href={loggedIn ? '/generate' : '/signup'}>

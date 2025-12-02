@@ -76,36 +76,37 @@ const Generate = () => {
     }
 
     return (
-        <div className="grid grid-cols-2">
-            <div className="col1 bg-[#E8B4A0] flex flex-col text-gray-950 items-center justify-center pl-[5vw]">
-                <div className='flex flex-col gap-5 my-8'>
-                    <h1 className='font-bold text-4xl'>Create Your Tree</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+            <div className="col1 bg-[#E8B4A0] flex flex-col text-gray-950 items-center justify-center px-6 md:pl-[5vw] pt-24 md:pt-0">
+                <div className='flex flex-col gap-5 my-8 w-full max-w-md'>
+                    <h1 className='font-bold text-3xl md:text-4xl'>Create Your Tree</h1>
 
                     <div className="item flex flex-col gap-2">
                         <h2 className='text-xl font-semibold p-1'>Step 1: Claim Your Handle</h2>
                         <input 
-                            className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white' 
+                            className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white w-full' 
                             type="text" 
                             placeholder='Choose a handle'
                             value={handle}
                             onChange={(e) => setHandle(e.target.value)}
                         />
+                        <p className='text-red-600 text-sm'>Note: Handle will be updated if changed.</p>
                     </div>
 
                     <div className="item flex flex-col gap-2">
                         <h2 className='text-xl font-semibold p-1'>Step 2: Add Links</h2>
                         <div className='flex flex-col gap-3'>
                             {links.map((link, index) => (
-                                <div className='flex gap-2' key={index}>
+                                <div className='flex flex-col md:flex-row gap-2' key={index}>
                                     <input
-                                        className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white w-1/2'
+                                        className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white w-full md:w-1/2'
                                         type="text"
                                         placeholder='Enter link title'
                                         value={link.title || ''}
                                         onChange={(e) => handleLinkChange(index, 'title', e.target.value)}
                                     />
                                     <input
-                                        className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white w-1/2'
+                                        className='px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500 rounded-full bg-white w-full md:w-1/2'
                                         type="text"
                                         placeholder='Enter link'
                                         value={link.url || ''}
@@ -153,7 +154,7 @@ const Generate = () => {
                 </div>
             </div>
 
-            <div className="col2 bg-[#E9C0E9] mr-[10vw] w-full overflow-y-auto">
+            <div className="col2 bg-[#E9C0E9] md:mr-[10vw] w-full overflow-y-auto hidden md:block">
                 <img src="generate.png" alt="generate cover" className='h-[125vh] object-contain mx-auto' />
             </div>
         </div>
