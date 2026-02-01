@@ -11,14 +11,20 @@ const Generate = () => {
 
     useEffect(() => {
         const userEmail = localStorage.getItem('linkium_user')
+        
         if (!userEmail) {
             router.push('/login')
             return
         }
 
         const fetchUserHandle = async () => {
+            const token = localStorage.getItem('linkium_token')
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {}
+
             try {
-                const response = await fetch(`/api/links?userEmail=${encodeURIComponent(userEmail)}`)
+                const response = await fetch(`/api/links?userEmail=${encodeURIComponent(userEmail)}`, {
+                    headers
+                })
                 const data = await response.json()
                 if (data.success && data.data && data.data.handle) {
                     setHandle(data.data.handle)
@@ -58,13 +64,20 @@ const Generate = () => {
     }
 
     const handleAddLinks = async () => {
-        const userEmail = localStorage.getItem('linkium_user')
+        const token = localStorage.getItem('linkium_token')
         const validLinks = links.filter(link => link.title.trim() && link.url.trim())
+        
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`
+        }
         
         const response = await fetch('/api/links', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userEmail, handle, links: validLinks }),
+            headers,
+            body: JSON.stringify({ handle, links: validLinks }),
         })
         
         const data = await response.json()
@@ -72,12 +85,21 @@ const Generate = () => {
             setStatusMessage('Links added successfully!')
             setLinks([{ title: '', url: '' }])
             setTimeout(() => setStatusMessage(''), 3000)
+        } else {
+            if (data.message === 'Invalid or expired token.' || data.message === 'Authentication required.') {
+                localStorage.removeItem('linkium_token')
+                localStorage.removeItem('linkium_user')
+                window.dispatchEvent(new Event('linkium-auth-change'))
+                router.push('/login')
+            } else {
+                setStatusMessage(data.message || 'Failed to add links.')
+            }
         }
     }
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="col1 bg-[#E8B4A0] flex flex-col text-gray-950 items-center justify-center px-6 md:pl-[5vw] pt-24 md:pt-0">
+            <div className="col1 bg-[#7fdaed] flex flex-col text-gray-950 items-center justify-center px-6 md:pl-[5vw] pt-24 md:pt-0">
                 <div className='flex flex-col gap-5 my-8 w-full max-w-md'>
                     <h1 className='font-bold text-3xl md:text-4xl'>Create Your Tree</h1>
 

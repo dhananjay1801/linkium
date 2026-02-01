@@ -18,7 +18,12 @@ const Navbar = () => {
         setUserEmail(stored)
 
         if(stored){
-            fetch(`/api/links?userEmail=${encodeURIComponent(stored)}`)
+            const token = localStorage.getItem('linkium_token')
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {}
+            
+            fetch(`/api/links?userEmail=${encodeURIComponent(stored)}`, {
+                headers
+            })
             .then(res => res.json())
             .then(data => {
                 if (data.success && data.data?.handle){
@@ -60,8 +65,13 @@ const Navbar = () => {
         }
 
         // Otherwise, fetch the handle for this user and then navigate
+        const token = localStorage.getItem('linkium_token')
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {}
+
         try {
-            const res = await fetch(`/api/links?userEmail=${encodeURIComponent(userEmail)}`)
+            const res = await fetch(`/api/links?userEmail=${encodeURIComponent(userEmail)}`, {
+                headers
+            })
             const data = await res.json()
             if (data.success && data.data?.handle) {
                 setHandle(data.data.handle)
@@ -74,6 +84,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         if (typeof window === 'undefined') return
+        localStorage.removeItem('linkium_token')
         localStorage.removeItem('linkium_user')
         window.dispatchEvent(new Event('linkium-auth-change'))
         setUserEmail(null)

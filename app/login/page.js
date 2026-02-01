@@ -36,6 +36,8 @@ const Login = () => {
             }
 
             if (typeof window !== 'undefined') {
+                // Store JWT token and user email
+                localStorage.setItem('linkium_token', data.token)
                 localStorage.setItem('linkium_user', data.email)
                 window.dispatchEvent(new Event('linkium-auth-change'))
             }

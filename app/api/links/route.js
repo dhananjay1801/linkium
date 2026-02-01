@@ -1,13 +1,35 @@
 import clientPromise from "@/lib/mongodb"
 import { NextResponse } from "next/server"
+import { verifyToken } from "@/lib/auth"
 
 export async function DELETE(request) {
     try {
-        const { userEmail, linkIndex } = await request.json()
-
-        if (!userEmail || linkIndex === undefined) {
+        // Verify JWT token
+        const authHeader = request.headers.get('Authorization')
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return NextResponse.json(
-                { success: false, message: "Email and link index are required." },
+                { success: false, message: "Authentication required." },
+                { status: 401 }
+            )
+        }
+
+        const token = authHeader.replace('Bearer ', '')
+        let decoded
+        try {
+            decoded = verifyToken(token)
+        } catch (error) {
+            return NextResponse.json(
+                { success: false, message: "Invalid or expired token." },
+                { status: 401 }
+            )
+        }
+
+        const userEmail = decoded.email
+        const { linkIndex } = await request.json()
+
+        if (linkIndex === undefined) {
+            return NextResponse.json(
+                { success: false, message: "Link index is required." },
                 { status: 400 }
             )
         }
@@ -43,11 +65,32 @@ export async function DELETE(request) {
 
 export async function POST(request) {
     try {
-        const { userEmail, handle, links } = await request.json()
-
-        if (!userEmail || !handle) {
+        // Verify JWT token
+        const authHeader = request.headers.get('Authorization')
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return NextResponse.json(
-                { success: false, message: "Email and handle are required." },
+                { success: false, message: "Authentication required." },
+                { status: 401 }
+            )
+        }
+
+        const token = authHeader.replace('Bearer ', '')
+        let decoded
+        try {
+            decoded = verifyToken(token)
+        } catch (error) {
+            return NextResponse.json(
+                { success: false, message: "Invalid or expired token." },
+                { status: 401 }
+            )
+        }
+
+        const userEmail = decoded.email
+        const { handle, links } = await request.json()
+
+        if (!handle) {
+            return NextResponse.json(
+                { success: false, message: "Handle is required." },
                 { status: 400 }
             )
         }
@@ -110,7 +153,36 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
         const handle = searchParams.get('handle')
-        const userEmail = searchParams.get('userEmail')
+        const userEmailParam = searchParams.get('userEmail')
+
+        // If accessing by handle (public access), no auth required
+        // If accessing by userEmail (private access), require auth
+        let userEmail = userEmailParam
+
+        if (userEmailParam && !handle) {
+            // Verify JWT token for private access
+            const authHeader = request.headers.get('Authorization')
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                return NextResponse.json(
+                    { success: false, message: "Authentication required." },
+                    { status: 401 }
+                )
+            }
+
+            const token = authHeader.replace('Bearer ', '')
+            let decoded
+            try {
+                decoded = verifyToken(token)
+            } catch (error) {
+                return NextResponse.json(
+                    { success: false, message: "Invalid or expired token." },
+                    { status: 401 }
+                )
+            }
+
+            // Use email from token, not from query param (security)
+            userEmail = decoded.email
+        }
 
         if (!handle && !userEmail) {
             return NextResponse.json(

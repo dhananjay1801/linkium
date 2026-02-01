@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb"
 import { NextResponse } from "next/server"
+import { comparePassword, signToken } from "@/lib/auth"
 
 export async function POST(request) {
     try {
@@ -16,7 +17,7 @@ export async function POST(request) {
         const db = client.db("linkium")
         const usersCollection = db.collection("users")
 
-        const user = await usersCollection.findOne({ email, password })
+        const user = await usersCollection.findOne({ email })
 
         if (!user) {
             return NextResponse.json(
@@ -25,7 +26,23 @@ export async function POST(request) {
             )
         }
 
-        return NextResponse.json({ success: true, message: "Logged in.", email }, { status: 200 })
+        // Compare password with hashed password
+        const isPasswordValid = await comparePassword(password, user.password)
+
+        if (!isPasswordValid) {
+            return NextResponse.json(
+                { success: false, message: "Invalid email or password." },
+                { status: 401 }
+            )
+        }
+
+        // Generate JWT token
+        const token = signToken(email)
+
+        return NextResponse.json(
+            { success: true, message: "Logged in.", email, token },
+            { status: 200 }
+        )
     } catch (error) {
         console.error("Login error:", error)
         return NextResponse.json(

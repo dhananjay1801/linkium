@@ -1,5 +1,6 @@
 import clientPromise from "@/lib/mongodb"
 import { NextResponse } from "next/server"
+import { hashPassword } from "@/lib/auth"
 
 export async function POST(request) {
     try {
@@ -31,9 +32,12 @@ export async function POST(request) {
             )
         }
 
+        // Hash password before storing
+        const hashedPassword = await hashPassword(password)
+
         await usersCollection.insertOne({
             email,
-            password,
+            password: hashedPassword,
             createdAt: new Date(),
         })
 

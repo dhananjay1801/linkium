@@ -59,15 +59,29 @@ export default function HandlePage() {
     }, [handle])
 
     const handleDeleteLink = async (index) => {
+        const token = localStorage.getItem('linkium_token')
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`
+        }
+
         try {
             const response = await fetch('/api/links', {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userEmail, linkIndex: index }),
+                headers,
+                body: JSON.stringify({ linkIndex: index }),
             })
             const data = await response.json()
             if (data.success) {
                 setLinkData(prev => ({ ...prev, links: data.links }))
+            } else {
+                if (data.message === 'Invalid or expired token.' || data.message === 'Authentication required.') {
+                    localStorage.removeItem('linkium_token')
+                    localStorage.removeItem('linkium_user')
+                    window.dispatchEvent(new Event('linkium-auth-change'))
+                }
             }
         } catch (err) {
             console.error('Failed to delete link:', err)
